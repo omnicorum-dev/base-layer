@@ -693,4 +693,24 @@ namespace omni::basic {
     };
 }
 
+// ========================================================
+// MORE FUNCTIONS
+// ========================================================
+namespace omni::basic {
+    omni::Vec3<float> barycentric(const omni::Vec2<int> p1,
+        const omni::Vec2<int> p2,
+        const omni::Vec2<int> p3,
+        const omni::Vec2<int> p)
+    {
+        const float det = ((p1.x - p3.x)*(p2.y - p3.y) - (p2.x - p3.x)*(p1.y - p3.y));
+        const float u1 = ((p2.y - p3.y)*(p.x - p3.x) + (p3.x - p3.x)*(p.y - p3.y))/det;
+        const float u2 = ((p3.y - p1.y)*(p.x - p3.x) + (p1.x - p3.x)*(p.y - p3.y))/det;
+        return {
+            u1,
+            u2,
+            1 - u1 - u2
+        };
+    }
+}
+
 #endif //BASE_H
