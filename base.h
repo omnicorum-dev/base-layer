@@ -315,17 +315,49 @@ namespace omni {
         friend Vec2<T> operator+(const Vec2<T>& a, const Vec2<T>& b) {
             return Vec2<T>(a.x + b.x, a.y + b.y);
         }
+        template<typename E>
+        friend Vec2<T> operator+(const Vec2<T>& a, E b) {
+            return Vec2<T>(a.x + b, a.y + b);
+        }
+        template<typename E>
+        friend Vec2<T> operator+(E b, const Vec2<T>& a) {
+            return Vec2<T>(a.x + b, a.y + b);
+        }
 
         friend Vec2<T> operator-(const Vec2<T>& a, const Vec2<T>& b) {
             return Vec2<T>(a.x - b.x, a.y - b.y);
+        }
+        template<typename E>
+        friend Vec2<T> operator-(const Vec2<T>& a, E b) {
+            return Vec2<T>(a.x - b, a.y - b);
+        }
+        template<typename E>
+        friend Vec2<T> operator-(E a, const Vec2<T>& b) {
+            return Vec2<T>(a - b.x, b - a.y);
         }
 
         friend Vec2<T> operator*(const Vec2<T>& a, const Vec2<T>& b) {
             return Vec2<T>(a.x * b.x, a.y * b.y);
         }
+        template<typename E>
+        friend Vec2<T> operator*(const Vec2<T>& a, const E& b) {
+            return Vec2<T>(a.x * b, a.y * b);
+        }
+        template<typename E>
+        friend Vec2<T> operator*(const E& b, const Vec2<T>& a) {
+            return Vec2<T>(a.x * b, a.y * b);
+        }
 
         friend Vec2<T> operator/(const Vec2<T>& a, const Vec2<T>& b) {
             return Vec2<T>(a.x / b.x, a.y / b.y);
+        }
+        template<typename E>
+        friend Vec2<T> operator/(const Vec2<T>& a, E b) {
+            return Vec2<T>(a.x / b, a.y / b);
+        }
+        template<typename E>
+        friend Vec2<T> operator/(E a, const Vec2<T>& b) {
+            return Vec2<T>(a / b.x, b / a.y);
         }
 
         friend constexpr T dot(const Vec2<T>& a, const Vec2<T>& b) {
