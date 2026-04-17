@@ -72,9 +72,9 @@ namespace omni::basic {
 // ========================================================
 namespace omni::basic {
     template<typename T>
-    static T lerp (const T a, const T b, const T t) { return a + (b - a) * t; }
+    static T lerp (const T a, const T b, const f32 t) { return a + (b - a) * t; }
     template<typename T>
-    static T unlerp (const T a, const T b, const T x) { if (a!=b) { return (x-a)/(b-a); } return 0.f; }
+    static T unlerp (const T a, const T b, const f32 x) { if (a!=b) { return (x-a)/(b-a); } return 0.f; }
 
     inline f32 rand_f32() { return static_cast<f32>(std::rand()) / static_cast<f32>(RAND_MAX); }
 
