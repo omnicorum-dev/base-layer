@@ -411,17 +411,49 @@ namespace omni {
         friend Vec3<T> operator+(const Vec3<T>& a, const Vec3<T>& b) {
             return Vec3<T>(a.x + b.x, a.y + b.y, a.z + b.z);
         }
+        template<typename E>
+        friend Vec3<T> operator+(const Vec3<T>& a, E b) {
+            return Vec3<T>(a.x + b, a.y + b, a.z + b);
+        }
+        template<typename E>
+        friend Vec3<T> operator+(E b, const Vec3<T>& a) {
+            return Vec3<T>(a.x + b, a.y + b, a.z + b);
+        }
 
         friend Vec3<T> operator-(const Vec3<T>& a, const Vec3<T>& b) {
             return Vec3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
+        }
+        template<typename E>
+        friend Vec3<T> operator-(const Vec3<T>& a, E b) {
+            return Vec3<T>(a.x - b, a.y - b, a.z - b);
+        }
+        template<typename E>
+        friend Vec3<T> operator-(E a, const Vec3<T>& b) {
+            return Vec3<T>(a - b.x, b - a.y, a - b.z);
         }
 
         friend Vec3<T> operator*(const Vec3<T>& a, const Vec3<T>& b) {
             return Vec3<T>(a.x * b.x, a.y * b.y, a.z * b.z);
         }
+        template<typename E>
+        friend Vec3<T> operator*(const Vec3<T>& a, const E& b) {
+            return Vec3<T>(a.x * b, a.y * b, a.z * b);
+        }
+        template<typename E>
+        friend Vec3<T> operator*(const E& b, const Vec3<T>& a) {
+            return Vec3<T>(a.x * b, a.y * b, a.z * b);
+        }
 
         friend Vec3<T> operator/(const Vec3<T>& a, const Vec3<T>& b) {
             return Vec3<T>(a.x / b.x, a.y / b.y, a.z / b.z);
+        }
+        template<typename E>
+        friend Vec3<T> operator/(const Vec3<T>& a, E b) {
+            return Vec3<T>(a.x / b, a.y / b, a.z / b);
+        }
+        template<typename E>
+        friend Vec3<T> operator/(E a, const Vec3<T>& b) {
+            return Vec3<T>(a / b.x, b / a.y, b / a.z);
         }
 
         friend inline constexpr T dot(const Vec3<T>& a, const Vec3<T>& b) {
