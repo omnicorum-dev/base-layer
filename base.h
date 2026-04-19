@@ -370,6 +370,11 @@ namespace omni {
             return a.x * b.x + a.y * b.y;
         }
 
+        friend constexpr T cross(const Vec2<T>& a, const Vec2<T>& b)
+        {
+            return a.x * b.y - a.y * b.x;
+        }
+
         friend inline T length(const Vec2<T>& a) {
             return sqrt(dot(a, a));
         }
@@ -458,6 +463,14 @@ namespace omni {
 
         friend inline constexpr T dot(const Vec3<T>& a, const Vec3<T>& b) {
             return a.x * b.x + a.y * b.y + a.z * b.z;
+        }
+
+        friend inline Vec3<T> cross(const Vec3<T>& a, const Vec3<T>& b) {
+            return {
+                a.y * b.z - a.z * b.y,
+                a.z * b.x - a.x * b.z,
+                a.x * b.y - a.y * b.x
+            };
         }
 
         friend inline T length(const Vec3<T>& a) {
