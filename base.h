@@ -11,6 +11,27 @@
 #include <string>
 #include <stdexcept>
 
+inline std::filesystem::path logPath;
+
+enum LogLevel {
+    FATAL,
+    ERROR,
+    WARN,
+    INFO,
+    DEBUG,
+    TRACE
+};
+
+struct LogEvent {
+    LogLevel level;
+    std::string message;
+
+    LogEvent(const LogLevel level, std::string message)
+        : level(level), message(std::move(message)) {}
+};
+
+inline std::vector<LogEvent> logger;
+
 // ========================================================
 // BASIC TYPES
 // ========================================================
@@ -197,54 +218,126 @@ namespace omni::basic {
     }
 
     template<typename... Args>
-    void LOG_FATAL(const std::string& fmt, Args... args) {
-        std::cerr << ANSI_RED << ANSI_BOLD << "[FATAL] ";
+    void _impl_log_fatal(const std::string& fmt, const char* file, const int line, const Args&... args) {
+        std::cerr << file << ":" << line << ANSI_RED << ANSI_BOLD <<  " [FATAL] ";
         print(std::cerr, fmt, args...);
         std::cerr << ANSI_RESET << std::endl;
+
+        logger.emplace_back(LogLevel::FATAL, stringPrint(fmt, args...));
+
+        if (!logPath.empty()) {
+            std::ofstream os(logPath, std::ios_base::app);
+            os << file << ":" << line << " [FATAL] ";
+            print(os, fmt, args...);
+            os << std::endl;
+            os.close();
+        }
     }
 
+    #define LOG_FATAL(fmt, ...) _impl_log_fatal(fmt, __FILE__, __LINE__, ##__VA_ARGS__)
+
     template<typename... Args>
-    void LOG_ERROR(const std::string& fmt, Args... args) {
-        std::cerr << ANSI_RED << "[ERROR] " << ANSI_ITALIC;
+    void _impl_log_error(const std::string& fmt, const char* file, const int line, const Args&... args) {
+        std::cerr << file << ":" << line << ANSI_RED << " [ERROR] " << ANSI_ITALIC;
         print(std::cerr, fmt, args...);
-        std::cerr << ANSI_RESET << std::endl;
+        std::cerr << ANSI_RESET << '\n';
+
+        logger.emplace_back(LogLevel::ERROR, stringPrint(fmt, args...));
+
+        if (!logPath.empty()) {
+            std::ofstream os(logPath, std::ios_base::app);
+            os << file << ":" << line << " [ERROR] ";
+            print(os, fmt, args...);
+            os << std::endl;
+            os.close();
+        }
     }
 
+    #define LOG_ERROR(fmt, ...) _impl_log_error(fmt, __FILE__, __LINE__, ##__VA_ARGS__)
+
     template<typename... Args>
-    void LOG_WARN(const std::string& fmt, Args... args) {
+    void _impl_log_warn(const std::string& fmt, const char* file, const int line, const Args&... args) {
         #ifndef DISABLE_WARN
-        std::cerr << ANSI_MAGENTA << "[WARN] ";
+        std::cerr << file << ":" << line << ANSI_MAGENTA << "  [WARN] ";
         print(std::cerr, fmt, args...);
         std::cerr << ANSI_RESET << std::endl;
+
+        logger.emplace_back(LogLevel::WARN, stringPrint(fmt, args...));
+
+        if (!logPath.empty()) {
+            std::ofstream os(logPath, std::ios_base::app);
+            os << file << ":" << line << "  [WARN] ";
+            print(os, fmt, args...);
+            os << std::endl;
+            os.close();
+        }
         #endif
     }
 
+    #define LOG_WARN(fmt, ...) _impl_log_warn(fmt, __FILE__, __LINE__, ##__VA_ARGS__)
+
     template<typename... Args>
-    void LOG_INFO(const std::string& fmt, Args... args) {
+    void _impl_log_info(const std::string& fmt, const char* file, const int line, const Args&... args) {
         #ifndef DISABLE_INFO
-        std::cerr << ANSI_GREEN << "[INFO] ";
+        std::cerr << file << ":" << line << ANSI_GREEN << "  [INFO] ";
         print(std::cerr, fmt, args...);
         std::cerr << ANSI_RESET << std::endl;
+
+        logger.emplace_back(LogLevel::INFO, stringPrint(fmt, args...));
+
+        if (!logPath.empty()) {
+            std::ofstream os(logPath, std::ios_base::app);
+            os << file << ":" << line << "  [INFO] ";
+            print(os, fmt, args...);
+            os << std::endl;
+            os.close();
+        }
         #endif
     }
 
+    #define LOG_INFO(fmt, ...) _impl_log_info(fmt, __FILE__, __LINE__, ##__VA_ARGS__)
+
     template<typename... Args>
-    void LOG_DEBUG(const std::string& fmt, Args... args) {
+    void _impl_log_debug(const std::string& fmt, const char* file, const int line, const Args&... args) {
         #ifndef DISABLE_DEBUG
-        std::cerr << ANSI_CYAN << "[DEBUG] " << ANSI_ITALIC;
+        std::cerr << file << ":" << line << ANSI_CYAN << " [DEBUG] " << ANSI_ITALIC;
         print(std::cerr, fmt, args...);
         std::cerr << ANSI_RESET << std::endl;
+
+        logger.emplace_back(LogLevel::DEBUG, stringPrint(fmt, args...));
+
+        if (!logPath.empty()) {
+            std::ofstream os(logPath, std::ios_base::app);
+            os << file << ":" << line << " [DEBUG] ";
+            print(os, fmt, args...);
+            os << std::endl;
+            os.close();
+        }
         #endif
     }
 
+    #define LOG_DEBUG(fmt, ...) _impl_log_debug(fmt, __FILE__, __LINE__, ##__VA_ARGS__)
+
     template<typename... Args>
-    void LOG_TRACE(const std::string& fmt, Args... args) {
+    void _impl_log_trace(const std::string& fmt, const char* file, const int line, const Args&... args) {
         #ifndef DISABLE_TRACE
-        std::cerr << ANSI_GREY << "[TRACE] " << ANSI_ITALIC;
+        std::cerr << file << ":" << line << ANSI_GREY << " [TRACE] " << ANSI_ITALIC;
         print(std::cerr, fmt, args...);
         std::cerr << ANSI_RESET << std::endl;
+
+        logger.emplace_back(LogLevel::TRACE, stringPrint(fmt, args...));
+
+        if (!logPath.empty()) {
+            std::ofstream os(logPath, std::ios_base::app);
+            os << file << ":" << line << " [TRACE] ";
+            print(os, fmt, args...);
+            os << std::endl;
+            os.close();
+        }
         #endif
     }
+
+    #define LOG_TRACE(fmt, ...) _impl_log_trace(fmt, __FILE__, __LINE__, ##__VA_ARGS__)
 
     template<typename... Args>
     void panic(const std::string& fmt, Args... args) {
