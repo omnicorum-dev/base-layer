@@ -13,20 +13,18 @@
 
 inline std::filesystem::path logPath;
 
-enum LogLevel {
-    FATAL,
-    ERROR,
-    WARN,
-    INFO,
-    DEBUG,
-    TRACE
-};
+#define LOG_LEVEL_FATAL 0
+#define LOG_LEVEL_ERROR 1
+#define LOG_LEVEL_WARN 2
+#define LOG_LEVEL_INFO 3
+#define LOG_LEVEL_DEBUG 4
+#define LOG_LEVEL_TRACE 5
 
 struct LogEvent {
-    LogLevel level;
+    int level;
     std::string message;
 
-    LogEvent(const LogLevel level, std::string message)
+    LogEvent(const int level, std::string message)
         : level(level), message(std::move(message)) {}
 };
 
@@ -223,7 +221,7 @@ namespace omni::basic {
         print(std::cerr, fmt, args...);
         std::cerr << ANSI_RESET << std::endl;
 
-        logger.emplace_back(LogLevel::FATAL, stringPrint(fmt, args...));
+        logger.emplace_back(LOG_LEVEL_FATAL, stringPrint(fmt, args...));
 
         if (!logPath.empty()) {
             std::ofstream os(logPath, std::ios_base::app);
@@ -242,7 +240,7 @@ namespace omni::basic {
         print(std::cerr, fmt, args...);
         std::cerr << ANSI_RESET << '\n';
 
-        logger.emplace_back(LogLevel::ERROR, stringPrint(fmt, args...));
+        logger.emplace_back(LOG_LEVEL_ERROR, stringPrint(fmt, args...));
 
         if (!logPath.empty()) {
             std::ofstream os(logPath, std::ios_base::app);
@@ -262,7 +260,7 @@ namespace omni::basic {
         print(std::cerr, fmt, args...);
         std::cerr << ANSI_RESET << std::endl;
 
-        logger.emplace_back(LogLevel::WARN, stringPrint(fmt, args...));
+        logger.emplace_back(LOG_LEVEL_WARN, stringPrint(fmt, args...));
 
         if (!logPath.empty()) {
             std::ofstream os(logPath, std::ios_base::app);
@@ -283,7 +281,7 @@ namespace omni::basic {
         print(std::cerr, fmt, args...);
         std::cerr << ANSI_RESET << std::endl;
 
-        logger.emplace_back(LogLevel::INFO, stringPrint(fmt, args...));
+        logger.emplace_back(LOG_LEVEL_INFO, stringPrint(fmt, args...));
 
         if (!logPath.empty()) {
             std::ofstream os(logPath, std::ios_base::app);
@@ -304,7 +302,7 @@ namespace omni::basic {
         print(std::cerr, fmt, args...);
         std::cerr << ANSI_RESET << std::endl;
 
-        logger.emplace_back(LogLevel::DEBUG, stringPrint(fmt, args...));
+        logger.emplace_back(LOG_LEVEL_DEBUG, stringPrint(fmt, args...));
 
         if (!logPath.empty()) {
             std::ofstream os(logPath, std::ios_base::app);
@@ -325,7 +323,7 @@ namespace omni::basic {
         print(std::cerr, fmt, args...);
         std::cerr << ANSI_RESET << std::endl;
 
-        logger.emplace_back(LogLevel::TRACE, stringPrint(fmt, args...));
+        logger.emplace_back(LOG_LEVEL_TRACE, stringPrint(fmt, args...));
 
         if (!logPath.empty()) {
             std::ofstream os(logPath, std::ios_base::app);
