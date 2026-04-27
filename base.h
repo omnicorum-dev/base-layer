@@ -788,7 +788,7 @@ namespace omni::basic {
 
 //#define PROFILING 1
 #if PROFILING
-#define PROFILE_SCOPE(name) ScopedBenchmarkTimer timer##__LINE__(name)
+#define PROFILE_SCOPE(name) omni::ScopedBenchmarkTimer timer##__LINE__(name)
 #define PROFILE_FUNCTION() PROFILE_SCOPE(__PRETTY_FUNCTION__)
 #else
 #define PROFILE_SCOPE(name)
