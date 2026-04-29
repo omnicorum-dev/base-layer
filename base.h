@@ -832,6 +832,7 @@ namespace omni::basic {
 // ========================================================
 // MORE FUNCTIONS
 // ========================================================
+/*
 namespace omni::basic {
     inline omni::Vec3<float> barycentric(const omni::Vec2<int> p1,
         const omni::Vec2<int> p2,
@@ -848,5 +849,6 @@ namespace omni::basic {
         };
     }
 }
+*/
 
 #endif //BASE_H
